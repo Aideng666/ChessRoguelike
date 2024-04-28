@@ -16,35 +16,35 @@ public class Square : MonoBehaviour
 
     public void InitSquare(ChessBoard board, string file, int rank, Color squareColor)
     {
-        //_spriteRenderer = GetComponent<SpriteRenderer>();
-        //_spriteRenderer.color = squareColor;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.color = squareColor;
         _board = board;
 
         Rank = rank;
         File = file;
 
         File = File.ToLower();
-        //_fileText.enabled = false;
-        //_rankText.enabled = false;
+        _fileText.enabled = false;
+        _rankText.enabled = false;
 
-        //if (Rank == 1)
-        //{
-        //    _fileText.enabled = true;
-        //    _fileText.text = File;
-        //}
-        //if (File == "a")
-        //{
-        //    _rankText.enabled = true;
-        //    _rankText.text = Rank.ToString();
-        //}
+        if (Rank == 1)
+        {
+            _fileText.enabled = true;
+            _fileText.text = File;
+        }
+        if (File == "a")
+        {
+            _rankText.enabled = true;
+            _rankText.text = Rank.ToString();
+        }
 
         gameObject.name = File + Rank.ToString();
 
-        //if (_spriteRenderer.color == Color.white)
-        //{
-        //    _fileText.color = Color.black;
-        //    _rankText.color = Color.black;
-        //}
+        if (_spriteRenderer.color == Color.white)
+        {
+            _fileText.color = Color.black;
+            _rankText.color = Color.black;
+        }
     }
 
     private void OnMouseDown()

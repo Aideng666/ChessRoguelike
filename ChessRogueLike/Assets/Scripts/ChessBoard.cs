@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class ChessBoard : MonoBehaviour
 {
@@ -12,9 +13,6 @@ public class ChessBoard : MonoBehaviour
 
     private void Awake()
     {
-        GameObject gameObject = new GameObject();
-        _squarePrefab = gameObject.AddComponent<Square>();
-
         _createBoard();
     }
 
@@ -52,18 +50,23 @@ public class ChessBoard : MonoBehaviour
 
     public Square GetSquare(string file, int rank)
     {
+        if (string.Compare(file, "h") > 0 || rank > 8 || rank == 0 || file == "")
+        {
+            return null;
+        }
+
         return Board[rank - 1, FileToNumber(file) - 1];
     }
 
-    public List<Square> GetSquaresInDirection(/*Square origin, */Direction direction)
+    public List<Square> GetSquaresInDirection(Square origin, Direction direction)
     {
         var availableSquares = new List<Square>();
 
-        var squareToCheck = SelectedSquare;
+        var squareToCheck = origin;
 
         while (squareToCheck != null)
         {
-            var nextSquare = GetAdjacentSquare(/*squareToCheck, */direction);
+            var nextSquare = GetAdjacentSquare(squareToCheck, direction);
 
             if (nextSquare != null)
             {
@@ -76,7 +79,65 @@ public class ChessBoard : MonoBehaviour
         return availableSquares;
     }
 
-    public Square GetAdjacentSquare(/*Square origin, */Direction direction)
+    public Square CheckSquareKnightSpaceAway(Square origin, KnightDirection direction)
+    {
+        Square knightSquare = null;
+
+        switch (direction)
+        {
+            case KnightDirection.OneOClock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) + 1), origin.Rank + 2);
+
+                break;
+
+            case KnightDirection.TwoOClock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) + 2), origin.Rank + 1);
+
+                break;
+
+            case KnightDirection.FourOClock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) + 2), origin.Rank - 1);
+
+                break;
+
+            case KnightDirection.FiveOClock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) + 1), origin.Rank - 2);
+
+                break;
+
+            case KnightDirection.SevenOClock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 1), origin.Rank - 2);
+
+                break;
+
+            case KnightDirection.EightOClock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 2), origin.Rank - 1);
+
+                break;
+
+            case KnightDirection.TenOClock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 2), origin.Rank + 1);
+
+                break;
+
+            case KnightDirection.ElevenOCLock:
+
+                knightSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 1), origin.Rank + 2);
+
+                break;
+        }
+
+        return knightSquare;
+    }
+
+    public Square GetAdjacentSquare(Square origin, Direction direction)
     {
         Square adjacentSquare = null;
 
@@ -84,49 +145,49 @@ public class ChessBoard : MonoBehaviour
         {
             case Direction.North:
 
-                adjacentSquare = GetSquare(SelectedSquare.File, SelectedSquare.Rank + 1);
+                adjacentSquare = GetSquare(origin.File, origin.Rank + 1);
 
                 break;
 
             case Direction.East:
 
-                adjacentSquare = GetSquare(NumberToFile(FileToNumber(SelectedSquare.File) + 1), SelectedSquare.Rank);
+                adjacentSquare = GetSquare(NumberToFile(FileToNumber(origin.File) + 1), origin.Rank);
 
                 break;
 
             case Direction.South:
 
-                adjacentSquare = GetSquare(SelectedSquare.File, SelectedSquare.Rank -  1);
+                adjacentSquare = GetSquare(origin.File, origin.Rank -  1);
 
                 break;
 
             case Direction.West:
 
-                adjacentSquare = GetSquare(NumberToFile(FileToNumber(SelectedSquare.File) - 1), SelectedSquare.Rank);
+                adjacentSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 1), origin.Rank);
 
                 break;
 
             case Direction.NorthEast:
 
-                adjacentSquare = GetSquare(NumberToFile(FileToNumber(SelectedSquare.File) + 1), SelectedSquare.Rank + 1);
+                adjacentSquare = GetSquare(NumberToFile(FileToNumber(origin.File) + 1), origin.Rank + 1);
 
                 break;
 
             case Direction.NorthWest:
 
-                adjacentSquare = GetSquare(NumberToFile(FileToNumber(SelectedSquare.File) - 1), SelectedSquare.Rank + 1);
+                adjacentSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 1), origin.Rank + 1);
 
                 break;
 
             case Direction.SouthEast:
 
-                adjacentSquare = GetSquare(NumberToFile(FileToNumber(SelectedSquare.File) + 1), SelectedSquare.Rank - 1);
+                adjacentSquare = GetSquare(NumberToFile(FileToNumber(origin.File) + 1), origin.Rank - 1);
 
                 break;
 
             case Direction.SouthWest:
 
-                adjacentSquare = GetSquare(NumberToFile(FileToNumber(SelectedSquare.File) - 1), SelectedSquare.Rank - 1);
+                adjacentSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 1), origin.Rank - 1);
 
                 break;
         }
@@ -193,6 +254,12 @@ public class ChessBoard : MonoBehaviour
                 number = 8;
 
                 break;
+
+            default:
+
+                number = 0;
+
+                break;
         }
 
         return number;
@@ -251,15 +318,15 @@ public class ChessBoard : MonoBehaviour
                 file = "h";
 
                 break;
+
+            default:
+
+                file = "";
+
+                break;
         }
 
         return file;
-    }
-
-    public void CreateSquarePrefabForTesting()
-    {
-        GameObject gameObject = new GameObject();
-        _squarePrefab = gameObject.AddComponent<Square>();
     }
 }
 
@@ -273,4 +340,16 @@ public enum Direction
     NorthWest,
     SouthEast,
     SouthWest
+}
+
+public enum KnightDirection
+{
+    OneOClock,
+    TwoOClock,
+    FourOClock,
+    FiveOClock,
+    SevenOClock,
+    EightOClock,
+    TenOClock,
+    ElevenOCLock
 }
