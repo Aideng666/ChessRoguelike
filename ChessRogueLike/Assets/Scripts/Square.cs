@@ -13,6 +13,7 @@ public class Square : MonoBehaviour
 
     public int Rank { get; private set; }
     public string File { get; private set; }
+    public ChessPiece CurrentPiece { get; set; } = null;
 
     public void InitSquare(ChessBoard board, string file, int rank, Color squareColor)
     {

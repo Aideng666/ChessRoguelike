@@ -8,6 +8,9 @@ public class ChessBoard : MonoBehaviour
     [SerializeField]
     private Square _squarePrefab;
 
+    [SerializeField]
+    private ChessPiece _pawnPrefab;
+
     public Square SelectedSquare { get; set; }
     public Square[,] Board { get; set; } = new Square[8, 8]; //first is rank second is file
 
@@ -46,6 +49,9 @@ public class ChessBoard : MonoBehaviour
                 nextSquareColor = Color.black;
             }
         }
+
+        var pawn = Instantiate(_pawnPrefab, new Vector3(5, 2, 0), Quaternion.identity, transform);
+        pawn.Init(Board[1, 4]);
     }
 
     public Square GetSquare(string file, int rank)
