@@ -7,43 +7,34 @@ public class ChessPiece : MonoBehaviour
     protected PieceType _pieceType;
     protected int _materialValue;
     protected Square _currentSquare;
-    protected List<Square> _availableSquares = new List<Square>();
     protected ChessBoard _board;
 
     protected int _numberOfMovesMade = 0;
 
-    public bool IsSelected { get; set; }
+    public List<Square> AvailableSquares { get; protected set; }
 
     public virtual void Init(Square startSquare)
     {
         _board = FindObjectOfType<ChessBoard>();
+        AvailableSquares = new List<Square>();
         _currentSquare = startSquare;
-        _checkAvailableSquares();
+
+        MoveTo(startSquare);
     }
 
-    protected void MoveTo(Square square)
+    public void MoveTo(Square square)
     {
+        _currentSquare.CurrentPiece = null;
         transform.position = square.transform.position;
         _currentSquare = square;
+        _currentSquare.CurrentPiece = this;
         _numberOfMovesMade++;
+        _checkAvailableSquares();
     }
 
     protected virtual void _checkAvailableSquares()
     {
 
-    }
-
-    private void OnMouseDown()
-    {
-        IsSelected = !IsSelected;
-
-        print($"IsSelected: {IsSelected}");
-        print($"Available Squares:");
-
-        foreach (Square square in _availableSquares)
-        {
-            print($"{square.File}{square.Rank}");
-        }
     }
 }
 

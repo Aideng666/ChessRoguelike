@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,9 +15,28 @@ public class ChessBoard : MonoBehaviour
     public Square SelectedSquare { get; set; }
     public Square[,] Board { get; set; } = new Square[8, 8]; //first is rank second is file
 
+    public Action<Square> OnSquareClicked;
+
+    private Player _player;
+
     private void Awake()
     {
         _createBoard();
+
+        foreach (var square in Board)
+        {
+            square.OnSquareClicked += _onSquareClicked;
+        }
+
+        _player = new Player(this);
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var piece in Board)
+        {
+            piece.OnSquareClicked -= _onSquareClicked;
+        }
     }
 
     private void _createBoard()
@@ -52,6 +72,11 @@ public class ChessBoard : MonoBehaviour
 
         var pawn = Instantiate(_pawnPrefab, new Vector3(5, 2, 0), Quaternion.identity, transform);
         pawn.Init(Board[1, 4]);
+    }
+
+    private void _onSquareClicked(Square square)
+    {
+        OnSquareClicked?.Invoke(square);
     }
 
     public Square GetSquare(string file, int rank)

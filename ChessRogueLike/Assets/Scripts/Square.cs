@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,6 +15,8 @@ public class Square : MonoBehaviour
     public int Rank { get; private set; }
     public string File { get; private set; }
     public ChessPiece CurrentPiece { get; set; } = null;
+
+    public Action<Square> OnSquareClicked;
 
     public void InitSquare(ChessBoard board, string file, int rank, Color squareColor)
     {
@@ -50,7 +53,7 @@ public class Square : MonoBehaviour
 
     private void OnMouseDown()
     {
-        print($"Selected {File.ToUpper()}{Rank}");
-        _board.SelectedSquare = this;
+        //print($"Selected {File.ToUpper()}{Rank}");
+        OnSquareClicked?.Invoke(this);
     }
 }

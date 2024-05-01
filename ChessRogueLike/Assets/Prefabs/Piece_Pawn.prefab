@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5708582664365180504, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_Name
-      value: Pawn Variant
+      value: Piece_Pawn
       objectReference: {fileID: 0}
     - target: {fileID: 8945497092708011303, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,7 +52,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3983852719842269928, guid: 949acb9a337995f44be72608299200c0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

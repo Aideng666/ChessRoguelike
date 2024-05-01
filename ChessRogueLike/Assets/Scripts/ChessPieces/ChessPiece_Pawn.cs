@@ -14,6 +14,8 @@ public class ChessPiece_Pawn : ChessPiece
 
     protected override void _checkAvailableSquares()
     {
+        AvailableSquares.Clear();
+
         //TODO: Factor out common code
 
         //first checks one square ahead
@@ -21,7 +23,7 @@ public class ChessPiece_Pawn : ChessPiece
 
         if (squareToCheck != null && squareToCheck.CurrentPiece == null)
         {
-            _availableSquares.Add(squareToCheck);
+            AvailableSquares.Add(squareToCheck);
 
             //if the one ahead was available it also checks 2 squares ahead if its the first move its making
             if (_numberOfMovesMade == 0)
@@ -30,7 +32,7 @@ public class ChessPiece_Pawn : ChessPiece
 
                 if (squareToCheck != null && squareToCheck.CurrentPiece == null)
                 {
-                    _availableSquares.Add(squareToCheck);
+                    AvailableSquares.Add(squareToCheck);
                 }
             }
         }
@@ -40,14 +42,14 @@ public class ChessPiece_Pawn : ChessPiece
 
         if (squareToCheck != null && squareToCheck.CurrentPiece != null)
         {
-            _availableSquares.Add(squareToCheck);
+            AvailableSquares.Add(squareToCheck);
         }
 
         squareToCheck = _board.GetAdjacentSquare(_currentSquare, Direction.NorthWest);
 
         if (squareToCheck != null && squareToCheck.CurrentPiece != null)
         {
-            _availableSquares.Add(squareToCheck);
+            AvailableSquares.Add(squareToCheck);
         }
 
         //TODO: Check for en passant
