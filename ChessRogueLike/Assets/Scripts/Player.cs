@@ -21,6 +21,11 @@ public class Player
     {
         SelectedSquare = square;
         SelectedChessPiece = square.CurrentPiece;
+
+        if (SelectedChessPiece != null)
+        {
+            SelectedChessPiece.UpdateAvailableSquares();
+        }
     }
 
     private void _resetSelectedSquare()
@@ -31,6 +36,22 @@ public class Player
 
     private void _onSquareClicked(Square square)
     {
+        //First reset old square states
+        if (SelectedSquare != null)
+        {
+            SelectedSquare.SetSquareState(SquareState.Default);
+        }
+
+        if (SelectedChessPiece != null)
+        {
+            foreach (var availableSquare in SelectedChessPiece.AvailableSquares)
+            {
+                availableSquare.SetSquareState(SquareState.Default);
+            }
+        }
+        /////////////////////////////////
+
+        //Set new selected square
         if (SelectedSquare == square)
         {
             _resetSelectedSquare();
@@ -44,6 +65,21 @@ public class Player
         {
             _setSelectedSquare(square);
         }
+        //////////////////////////////
 
+        //Set new square states
+        if (SelectedSquare != null)
+        {
+            SelectedSquare.SetSquareState(SquareState.Selected);
+        }
+
+        if (SelectedChessPiece != null)
+        {
+            foreach (var availableSquare in SelectedChessPiece.AvailableSquares)
+            {
+                availableSquare.SetSquareState(SquareState.AvailableToMove);
+            }
+        }
+        /////////////////////////////
     }
 }

@@ -46,3 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _squarePrefab: {fileID: 1894309866197332610, guid: bcd7cbfaefcfe474c9e888a293544891, type: 3}
   _pawnPrefab: {fileID: 7649194525402080351, guid: 05e4255c59bbeae4382730370e076f71, type: 3}
+  _bishopPrefab: {fileID: 4880276244935670555, guid: 6221c3c31cafe544c939493a71335440, type: 3}
+  _knightPrefab: {fileID: 6900749668983725266, guid: 2e0f3e1de766a3744aa489179f0d5d8b, type: 3}
+  _rookPrefab: {fileID: 6531688902231625097, guid: 7685920e254051a41a1be92757652efe, type: 3}
+  _queenPrefab: {fileID: 1651662619565370852, guid: 42e9561fdd9df104caee27a0f92f4928, type: 3}
+  _kingPrefab: {fileID: 551744720772321990, guid: 6dabefe72f8f9d64a8db4c844a0d0c6a, type: 3}

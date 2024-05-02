@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.UI.Image;
+using UnityEngine.UI;
 
 public class ChessBoard : MonoBehaviour
 {
@@ -11,6 +11,21 @@ public class ChessBoard : MonoBehaviour
 
     [SerializeField]
     private ChessPiece _pawnPrefab;
+
+    [SerializeField]
+    private ChessPiece _bishopPrefab;
+
+    [SerializeField]
+    private ChessPiece _knightPrefab;
+
+    [SerializeField]
+    private ChessPiece _rookPrefab;
+
+    [SerializeField]
+    private ChessPiece _queenPrefab;
+
+    [SerializeField]
+    private ChessPiece _kingPrefab;
 
     public Square SelectedSquare { get; set; }
     public Square[,] Board { get; set; } = new Square[8, 8]; //first is rank second is file
@@ -70,8 +85,49 @@ public class ChessBoard : MonoBehaviour
             }
         }
 
-        var pawn = Instantiate(_pawnPrefab, new Vector3(5, 2, 0), Quaternion.identity, transform);
-        pawn.Init(Board[1, 4]);
+
+        //Creating the white pieces
+        for (int i = 1; i <= 8; i++)
+        {
+            _spawnPiece(_pawnPrefab, Board[1, i - 1], Color.white);
+        }
+
+        _spawnPiece(_bishopPrefab, Board[0, 2], Color.white);
+        _spawnPiece(_bishopPrefab, Board[0, 5], Color.white);
+
+        _spawnPiece(_knightPrefab, Board[0, 1], Color.white);
+        _spawnPiece(_knightPrefab, Board[0, 6], Color.white);
+
+        _spawnPiece(_rookPrefab, Board[0, 0], Color.white);
+        _spawnPiece(_rookPrefab, Board[0, 7], Color.white);
+
+        _spawnPiece(_queenPrefab, Board[0, 3], Color.white);
+        _spawnPiece(_kingPrefab, Board[0, 4], Color.white);
+
+        //black pieces
+        for (int i = 1; i <= 8; i++)
+        {
+            _spawnPiece(_pawnPrefab, Board[6, i - 1], Color.black);
+        }
+
+        _spawnPiece(_bishopPrefab, Board[7, 2], Color.black);
+        _spawnPiece(_bishopPrefab, Board[7, 5], Color.black);
+
+        _spawnPiece(_knightPrefab, Board[7, 1], Color.black);
+        _spawnPiece(_knightPrefab, Board[7, 6], Color.black);
+
+        _spawnPiece(_rookPrefab, Board[7, 0], Color.black);
+        _spawnPiece(_rookPrefab, Board[7, 7], Color.black);
+
+        _spawnPiece(_queenPrefab, Board[7, 3], Color.black);
+        _spawnPiece(_kingPrefab, Board[7, 4], Color.black);
+
+    }
+
+    private void _spawnPiece(ChessPiece piece, Square square, Color color)
+    {
+        var spawnedPiece = Instantiate(piece, square.transform.position, Quaternion.identity, transform);
+        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color);
     }
 
     private void _onSquareClicked(Square square)
@@ -81,7 +137,7 @@ public class ChessBoard : MonoBehaviour
 
     public Square GetSquare(string file, int rank)
     {
-        if (string.Compare(file, "h") > 0 || rank > 8 || rank == 0 || file == "")
+        if (string.Compare(file, "h") > 0 || rank > 8 || rank <= 0 || file == "")
         {
             return null;
         }
@@ -221,11 +277,6 @@ public class ChessBoard : MonoBehaviour
                 adjacentSquare = GetSquare(NumberToFile(FileToNumber(origin.File) - 1), origin.Rank - 1);
 
                 break;
-        }
-
-        if (adjacentSquare == null)
-        {
-            print("No Adjacent Square Found");
         }
 
         return adjacentSquare;

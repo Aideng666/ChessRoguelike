@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &268747376462843847
+--- !u!1001 &2815947529808540788
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5708582664365180504, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_Name
-      value: Piece_Pawn
+      value: Piece_Bishop
+      objectReference: {fileID: 0}
+    - target: {fileID: 7479288703085895861, guid: 949acb9a337995f44be72608299200c0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2091966007, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
+    - target: {fileID: 7479288703085895861, guid: 949acb9a337995f44be72608299200c0, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7479288703085895861, guid: 949acb9a337995f44be72608299200c0, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7479288703085895861, guid: 949acb9a337995f44be72608299200c0, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8945497092708011303, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,39 +68,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3983852719842269928, guid: 949acb9a337995f44be72608299200c0, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5708582664365180504, guid: 949acb9a337995f44be72608299200c0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7649194525402080351}
+      addedObject: {fileID: 4880276244935670555}
   m_SourcePrefab: {fileID: 100100000, guid: 949acb9a337995f44be72608299200c0, type: 3}
---- !u!1 &5513036929292192159 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5708582664365180504, guid: 949acb9a337995f44be72608299200c0, type: 3}
-  m_PrefabInstance: {fileID: 268747376462843847}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7649194525402080351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5513036929292192159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab70425661553c540a578d44ca7019e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _whiteSprite: {fileID: -746373383, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
-  _blackSprite: {fileID: -887340393, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
-  _pieceIcon: {fileID: 7237580517793869682}
---- !u!114 &7237580517793869682 stripped
+--- !u!114 &4674600250070439105 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7479288703085895861, guid: 949acb9a337995f44be72608299200c0, type: 3}
-  m_PrefabInstance: {fileID: 268747376462843847}
+  m_PrefabInstance: {fileID: 2815947529808540788}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -92,3 +87,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7506573603619533356 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5708582664365180504, guid: 949acb9a337995f44be72608299200c0, type: 3}
+  m_PrefabInstance: {fileID: 2815947529808540788}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4880276244935670555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7506573603619533356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b53ffc4c0cad1448fcb986d56abe30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _whiteSprite: {fileID: -2091966007, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
+  _blackSprite: {fileID: -1485336553, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
+  _pieceIcon: {fileID: 4674600250070439105}
