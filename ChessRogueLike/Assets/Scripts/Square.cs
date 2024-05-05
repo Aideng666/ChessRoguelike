@@ -22,12 +22,11 @@ public class Square : MonoBehaviour
     public SquareState SquareState { get; private set; }
 
     public Action<Square> OnSquareClicked;
+    public Action<Square> OnMouseReleased;
 
     public void InitSquare(ChessBoard board, string file, int rank, Color squareColor)
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.color = squareColor;
-        _savedColor = squareColor;
         _board = board;
         _availableToMoveIcon.enabled = false;
         _availableToMoveIconWithPiece.enabled = false;
@@ -52,11 +51,23 @@ public class Square : MonoBehaviour
 
         gameObject.name = File + Rank.ToString();
 
+        if (squareColor == Color.black)
+        {
+            _spriteRenderer.color = Color.grey;
+            _savedColor = Color.grey;
+        }
+        else
+        {
+            _spriteRenderer.color = Color.white;
+            _savedColor = Color.white;
+        }
+
         if (_spriteRenderer.color == Color.white)
         {
             _fileText.color = Color.black;
             _rankText.color = Color.black;
         }
+
     }
 
     public void SetCurrentPiece(ChessPiece newPiece)
@@ -106,9 +117,21 @@ public class Square : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            var mousePosInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            if (Math.Abs(mousePosInWorld.x - transform.position.x) < 0.5f && Math.Abs(mousePosInWorld.y - transform.position.y) < 0.5f)
+            {
+                OnMouseReleased?.Invoke(this);
+            }
+        }
+    }
+
     private void OnMouseDown()
     {
-        //print($"Selected {File.ToUpper()}{Rank}");
         OnSquareClicked?.Invoke(this);
     }
 }

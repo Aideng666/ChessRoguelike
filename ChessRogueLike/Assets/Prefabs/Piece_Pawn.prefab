@@ -13,6 +13,10 @@ PrefabInstance:
       value: Piece_Pawn
       objectReference: {fileID: 0}
     - target: {fileID: 8945497092708011303, guid: 949acb9a337995f44be72608299200c0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8945497092708011303, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -80,15 +84,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _whiteSprite: {fileID: -746373383, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
   _blackSprite: {fileID: -887340393, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
-  _pieceIcon: {fileID: 7237580517793869682}
---- !u!114 &7237580517793869682 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7479288703085895861, guid: 949acb9a337995f44be72608299200c0, type: 3}
-  m_PrefabInstance: {fileID: 268747376462843847}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

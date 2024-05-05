@@ -7,12 +7,13 @@ public class ChessPiece : MonoBehaviour
 {
     [SerializeField] private Sprite _whiteSprite;
     [SerializeField] private Sprite _blackSprite;
-    [SerializeField] private Image _pieceIcon;
+    //[SerializeField] private Image _pieceIcon;
 
     protected PieceType _pieceType;
     protected int _materialValue;
     protected Square _currentSquare;
     protected ChessBoard _board;
+    protected SpriteRenderer _spriteRenderer;
 
     protected int _numberOfMovesMade = 0;
 
@@ -21,6 +22,7 @@ public class ChessPiece : MonoBehaviour
 
     public virtual void Init(Square startSquare, Color color)
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _board = FindObjectOfType<ChessBoard>();
         Color = color;
         AvailableSquares = new List<Square>();
@@ -32,18 +34,18 @@ public class ChessPiece : MonoBehaviour
 
         if (Color == Color.black)
         {
-            _pieceIcon.sprite = _blackSprite;
+            _spriteRenderer.sprite = _blackSprite;
         }
         else
         {
-            _pieceIcon.sprite = _whiteSprite;
+            _spriteRenderer.sprite = _whiteSprite;
         }
 
     }
 
     private void OnDestroy()
     {
-        _pieceIcon.enabled = false;
+        _spriteRenderer.enabled = false;
     }
 
     public void MoveTo(Square square)
