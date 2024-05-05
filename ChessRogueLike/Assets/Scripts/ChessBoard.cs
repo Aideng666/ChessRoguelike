@@ -31,6 +31,7 @@ public class ChessBoard : MonoBehaviour
     public Square[,] Board { get; set; } = new Square[8, 8]; //first is rank second is file
 
     public Action<Square> OnSquareClicked;
+    public Action<Square> OnMouseReleased;
 
     private Player _player;
 
@@ -41,6 +42,7 @@ public class ChessBoard : MonoBehaviour
         foreach (var square in Board)
         {
             square.OnSquareClicked += _onSquareClicked;
+            square.OnMouseReleased += _onMouseReleased;
         }
 
         _player = new Player(this);
@@ -48,9 +50,25 @@ public class ChessBoard : MonoBehaviour
 
     private void OnDestroy()
     {
-        foreach (var piece in Board)
+        foreach (var square in Board)
         {
-            piece.OnSquareClicked -= _onSquareClicked;
+            square.OnSquareClicked -= _onSquareClicked;
+            square.OnMouseReleased -= _onMouseReleased;
+        }
+    }
+
+    private void Update()
+    {
+        _player.Tick();
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            var mousePosInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            if (mousePosInWorld.x < 0.5f || mousePosInWorld.x > 8.5f || mousePosInWorld.y < 0.5f || mousePosInWorld.y > 8.5f)
+            {
+                OnMouseReleased?.Invoke(null);
+            }
         }
     }
 
@@ -133,6 +151,11 @@ public class ChessBoard : MonoBehaviour
     private void _onSquareClicked(Square square)
     {
         OnSquareClicked?.Invoke(square);
+    }
+
+    private void _onMouseReleased(Square square)
+    {
+        OnMouseReleased?.Invoke(square);
     }
 
     public Square GetSquare(string file, int rank)

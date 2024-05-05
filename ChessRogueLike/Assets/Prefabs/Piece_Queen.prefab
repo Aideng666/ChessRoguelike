@@ -10,13 +10,17 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4794129961707453293, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0.9
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 5708582664365180504, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_Name
       value: Piece_Queen
       objectReference: {fileID: 0}
     - target: {fileID: 7479288703085895861, guid: 949acb9a337995f44be72608299200c0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1567890582, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
+    - target: {fileID: 7979095574758910191, guid: 949acb9a337995f44be72608299200c0, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1567890582, guid: b4d0da0ec1c74d549913ba8499a17b6f, type: 3}
