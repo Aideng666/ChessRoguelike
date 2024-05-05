@@ -33,10 +33,14 @@ public class ChessBoard : MonoBehaviour
     public Action<Square> OnSquareClicked;
     public Action<Square> OnMouseReleased;
 
-    private Player _player;
+    public List<ChessPiece> WhitePieces { get; private set; }
+    public List<ChessPiece> BlackPieces { get; private set; }
 
     private void Awake()
     {
+        WhitePieces = new List<ChessPiece>();
+        BlackPieces = new List<ChessPiece>();
+
         _createBoard();
 
         foreach (var square in Board)
@@ -44,8 +48,6 @@ public class ChessBoard : MonoBehaviour
             square.OnSquareClicked += _onSquareClicked;
             square.OnMouseReleased += _onMouseReleased;
         }
-
-        _player = new Player(this);
     }
 
     private void OnDestroy()
@@ -59,8 +61,6 @@ public class ChessBoard : MonoBehaviour
 
     private void Update()
     {
-        _player.Tick();
-
         if (Input.GetMouseButtonUp(0))
         {
             var mousePosInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -146,6 +146,15 @@ public class ChessBoard : MonoBehaviour
     {
         var spawnedPiece = Instantiate(piece, square.transform.position, Quaternion.identity, transform);
         spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color);
+
+        if (color == Color.white)
+        {
+            WhitePieces.Add(spawnedPiece);
+        }
+        else if (color == Color.black)
+        {
+            BlackPieces.Add(spawnedPiece);
+        }
     }
 
     private void _onSquareClicked(Square square)
