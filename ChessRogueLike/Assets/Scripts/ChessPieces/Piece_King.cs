@@ -9,7 +9,7 @@ public class Piece_King : ChessPiece
         base.Init(startSquare, color);
 
         _pieceType = PieceType.King;
-        _materialValue = 0;
+        MaterialValue = 0;
     }
 
     private void _checkAvailableAdjacentSquare(Direction direction)

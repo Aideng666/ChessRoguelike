@@ -9,7 +9,7 @@ public class Piece_Bishop : ChessPiece
         base.Init(startSquare, color);
 
         _pieceType = PieceType.Bishop;
-        _materialValue = 3;
+        MaterialValue = 3;
     }
 
     private void _checkAvailableSquaresInDirection(Direction direction)

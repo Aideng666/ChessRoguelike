@@ -1,3 +1,4 @@
+using Codice.CM.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,8 @@ public class ChessPiece : MonoBehaviour
 {
     [SerializeField] private Sprite _whiteSprite;
     [SerializeField] private Sprite _blackSprite;
-    //[SerializeField] private Image _pieceIcon;
 
     protected PieceType _pieceType;
-    protected int _materialValue;
     protected Square _currentSquare;
     protected ChessBoard _board;
     protected SpriteRenderer _spriteRenderer;
@@ -19,6 +18,7 @@ public class ChessPiece : MonoBehaviour
 
     public List<Square> AvailableSquares { get; protected set; }
     public Color Color { get; private set; }
+    public int MaterialValue { get; protected set; }
 
     public virtual void Init(Square startSquare, Color color)
     {

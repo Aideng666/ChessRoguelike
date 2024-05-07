@@ -9,7 +9,7 @@ public class Piece_Knight : ChessPiece
         base.Init(startSquare, color);
 
         _pieceType = PieceType.Knight;
-        _materialValue = 3;
+        MaterialValue = 3;
     }
 
     private void _checkAvailableKnightSquare(KnightDirection direction)

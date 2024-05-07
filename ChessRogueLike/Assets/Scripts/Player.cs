@@ -19,7 +19,7 @@ public class Player
 
     public Action OnTurnComplete;
 
-    public Player(ChessBoard board, List<ChessPiece> pieces)
+    public Player(ChessBoard board)
     {
         SelectedSquare = null;
         SelectedPiece = null;
@@ -28,12 +28,23 @@ public class Player
         board.OnMouseReleased += _onMouseReleased;
 
         _isPlayerTurn = false;
-        _pieces = pieces;
+
+        _pieces = new List<ChessPiece>();
     }
 
     public void SetPlayerTurn()
     {
         _isPlayerTurn = true;
+    }
+
+    public void SetPieces(List<ChessPiece> pieces)
+    {
+        _pieces = pieces;
+    }
+
+    public void ClearPieces()
+    {
+        _pieces.Clear();
     }
 
     public void Tick()

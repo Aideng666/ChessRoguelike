@@ -9,7 +9,7 @@ public class Piece_Pawn : ChessPiece
         base.Init(startSquare, color);
 
         _pieceType = PieceType.Pawn;
-        _materialValue = 1;
+        MaterialValue = 1;
     }
 
     protected override void _checkAvailableSquares()

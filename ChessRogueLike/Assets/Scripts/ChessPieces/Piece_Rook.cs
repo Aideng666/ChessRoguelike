@@ -9,7 +9,7 @@ public class Piece_Rook : ChessPiece
         base.Init(startSquare, color);
 
         _pieceType = PieceType.Rook;
-        _materialValue = 5;
+        MaterialValue = 5;
     }
 
     private void _checkAvailableSquaresInDirection(Direction direction)
