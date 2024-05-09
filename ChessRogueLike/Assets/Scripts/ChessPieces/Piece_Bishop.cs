@@ -14,7 +14,7 @@ public class Piece_Bishop : ChessPiece
 
     private void _checkAvailableSquaresInDirection(Direction direction)
     {
-        var squaresToCheck = _board.GetSquaresInDirection(_currentSquare, direction);
+        var squaresToCheck = _board.GetSquaresInDirection(CurrentSquare, direction);
 
         if (squaresToCheck.Count > 0)
         {

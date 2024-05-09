@@ -14,7 +14,7 @@ public class Piece_Knight : ChessPiece
 
     private void _checkAvailableKnightSquare(KnightDirection direction)
     {
-        var squareToCheck = _board.CheckSquareKnightSpaceAway(_currentSquare, direction);
+        var squareToCheck = _board.CheckSquareKnightSpaceAway(CurrentSquare, direction);
 
         if (squareToCheck != null && squareToCheck.CurrentPiece == null)
         {

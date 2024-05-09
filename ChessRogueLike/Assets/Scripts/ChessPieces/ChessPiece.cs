@@ -10,15 +10,15 @@ public class ChessPiece : MonoBehaviour
     [SerializeField] private Sprite _blackSprite;
 
     protected PieceType _pieceType;
-    protected Square _currentSquare;
     protected ChessBoard _board;
-    protected SpriteRenderer _spriteRenderer;
+    private SpriteRenderer _spriteRenderer;
 
     protected int _numberOfMovesMade = 0;
 
-    public List<Square> AvailableSquares { get; protected set; }
+    public List<Square> AvailableSquares { get; private set; }
     public Color Color { get; private set; }
     public int MaterialValue { get; protected set; }
+    public Square CurrentSquare { get; private set; }
 
     public virtual void Init(Square startSquare, Color color)
     {
@@ -26,8 +26,8 @@ public class ChessPiece : MonoBehaviour
         _board = FindObjectOfType<ChessBoard>();
         Color = color;
         AvailableSquares = new List<Square>();
-        _currentSquare = startSquare;
-        _currentSquare.SetCurrentPiece(this);
+        CurrentSquare = startSquare;
+        CurrentSquare.SetCurrentPiece(this);
         transform.position = startSquare.transform.position;
         _numberOfMovesMade = 0;
         _checkAvailableSquares();
@@ -56,10 +56,10 @@ public class ChessPiece : MonoBehaviour
             Destroy(square.CurrentPiece);
         }
 
-        _currentSquare.SetCurrentPiece(null);
+        CurrentSquare.SetCurrentPiece(null);
         transform.position = square.transform.position;
-        _currentSquare = square;
-        _currentSquare.SetCurrentPiece(this);
+        CurrentSquare = square;
+        CurrentSquare.SetCurrentPiece(this);
         _numberOfMovesMade++;
         _checkAvailableSquares();
     }

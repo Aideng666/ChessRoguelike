@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private Player _player2;
     private GameState _gameState;
     private int _roundNumber;
+    private List<PieceType> _player1Pieces;
 
     public int Turn { get; private set; }
 
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
         _player2.OnTurnComplete += _onTurnComplete;
 
         _roundNumber = 0;
+
+        _initPlayerPieces();
 
         _startNewRound();
     }
@@ -44,10 +47,20 @@ public class GameManager : MonoBehaviour
             _player2.Tick();
         }
 
+        //temp
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _startNewRound();
         }
+    }
+
+    private void _initPlayerPieces()
+    {
+        _player1Pieces = new List<PieceType>
+        {
+            PieceType.Pawn,
+            PieceType.Pawn
+        };
     }
 
     private void _onTurnComplete()
@@ -69,7 +82,6 @@ public class GameManager : MonoBehaviour
     private void _startNewRound()
     {
         _board.ClearBoard();
-        _player1.ClearPieces();
         _player2.ClearPieces();
 
         _gameState = GameState.PreRound;
@@ -95,7 +107,8 @@ public class GameManager : MonoBehaviour
     private void _spawnOpponentPieces(Color pieceColor)
     {
         int totalMaterialValue = _roundNumber;
-
+        List<ChessPiece> spawnedPieces = new List<ChessPiece>();
+        
         while (totalMaterialValue > 0)
         {
             var availableStartingSquares = _board.GetAvailableStartingSquares(2);
@@ -116,8 +129,8 @@ public class GameManager : MonoBehaviour
                     //replace the flat values with the Material Value of the piece
                     if (totalMaterialValue >= 1)
                     {
-                        _board.SpawnPiece(randomPiece, randomSquare, pieceColor);
-
+                        spawnedPieces.Add(_board.SpawnPiece(randomPiece, randomSquare, pieceColor));
+                        
                         totalMaterialValue -= 1;
                     }
 
@@ -127,7 +140,7 @@ public class GameManager : MonoBehaviour
 
                     if (totalMaterialValue >= 3)
                     {
-                        _board.SpawnPiece(randomPiece, randomSquare, pieceColor);
+                        spawnedPieces.Add(_board.SpawnPiece(randomPiece, randomSquare, pieceColor));
 
                         totalMaterialValue -= 3;
                     }
@@ -138,7 +151,7 @@ public class GameManager : MonoBehaviour
 
                     if (totalMaterialValue >= 3)
                     {
-                        _board.SpawnPiece(randomPiece, randomSquare, pieceColor);
+                        spawnedPieces.Add(_board.SpawnPiece(randomPiece, randomSquare, pieceColor));
 
                         totalMaterialValue -= 3;
                     }
@@ -149,7 +162,7 @@ public class GameManager : MonoBehaviour
 
                     if (totalMaterialValue >= 5)
                     {
-                        _board.SpawnPiece(randomPiece, randomSquare, pieceColor);
+                        spawnedPieces.Add(_board.SpawnPiece(randomPiece, randomSquare, pieceColor));
 
                         totalMaterialValue -= 5;
                     }
@@ -160,7 +173,7 @@ public class GameManager : MonoBehaviour
 
                     if (totalMaterialValue >= 9)
                     {
-                        _board.SpawnPiece(randomPiece, randomSquare, pieceColor);
+                        spawnedPieces.Add(_board.SpawnPiece(randomPiece, randomSquare, pieceColor));
 
                         totalMaterialValue -= 9;
                     }
@@ -168,6 +181,8 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+        
+        _player2.SetPieces(spawnedPieces);
     }
 }
 

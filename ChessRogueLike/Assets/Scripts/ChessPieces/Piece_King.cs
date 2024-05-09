@@ -14,7 +14,7 @@ public class Piece_King : ChessPiece
 
     private void _checkAvailableAdjacentSquare(Direction direction)
     {
-        var squareToCheck = _board.GetAdjacentSquare(_currentSquare, direction);
+        var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, direction);
 
         if (squareToCheck != null && squareToCheck.CurrentPiece == null)
         {

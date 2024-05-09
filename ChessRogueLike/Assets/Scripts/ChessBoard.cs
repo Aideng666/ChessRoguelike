@@ -139,10 +139,9 @@ public class ChessBoard : MonoBehaviour
 
         //_spawnPiece(_queenPrefab, Board[7, 3], Color.black);
         //_spawnPiece(_kingPrefab, Board[7, 4], Color.black);
-
     }
 
-    public void SpawnPiece(PieceType pieceType, Square square, Color color)
+    public ChessPiece SpawnPiece(PieceType pieceType, Square square, Color color)
     {
         ChessPiece piece = null;
 
@@ -197,6 +196,8 @@ public class ChessBoard : MonoBehaviour
         {
             BlackPieces.Add(spawnedPiece);
         }
+
+        return spawnedPiece;
     }
 
     public List<Square> GetAvailableStartingSquares(int playerNum)
@@ -237,11 +238,13 @@ public class ChessBoard : MonoBehaviour
     {
         for (int i = WhitePieces.Count - 1; i >= 0; i--)
         {
+            WhitePieces[i].CurrentSquare.SetCurrentPiece(null);
             Destroy(WhitePieces[i]);
         }
 
         for (int i = BlackPieces.Count - 1; i >= 0; i--)
         {
+            BlackPieces[i].CurrentSquare.SetCurrentPiece(null);
             Destroy(BlackPieces[i]);
         }
 

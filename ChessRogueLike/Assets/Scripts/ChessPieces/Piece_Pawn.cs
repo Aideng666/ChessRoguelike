@@ -31,7 +31,7 @@ public class Piece_Pawn : ChessPiece
         //TODO: Factor out common code
 
         //first checks one square ahead
-        var squareToCheck = _board.GetAdjacentSquare(_currentSquare, Direction.North);
+        var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, Direction.North);
 
         if (squareToCheck != null && squareToCheck.CurrentPiece == null)
         {
@@ -58,7 +58,7 @@ public class Piece_Pawn : ChessPiece
     private void _checkAvailableSquaresForBlack()
     {
         //first checks one square ahead
-        var squareToCheck = _board.GetAdjacentSquare(_currentSquare, Direction.South);
+        var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, Direction.South);
 
         if (squareToCheck != null && squareToCheck.CurrentPiece == null)
         {
@@ -82,7 +82,7 @@ public class Piece_Pawn : ChessPiece
 
     private void _checkDiagonal(Direction direction)
     {
-        var squareToCheck = _board.GetAdjacentSquare(_currentSquare, direction);
+        var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, direction);
 
         if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.Color != Color)
         {
