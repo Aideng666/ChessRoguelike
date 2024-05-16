@@ -1,92 +1,122 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Piece_Pawn : ChessPiece
+namespace ChessPieces
 {
-    public override void Init(Square startSquare, Color color)
+    public class Piece_Pawn : ChessPiece
     {
-        base.Init(startSquare, color);
-
-        _pieceType = PieceType.Pawn;
-        _materialValue = 1;
-    }
-
-    protected override void _checkAvailableSquares()
-    {
-        base._checkAvailableSquares();
-
-        if (Color == Color.black)
+        private int _finalRank;
+        
+        public override void Init(Square startSquare, Color color, Player player)
         {
-            _checkAvailableSquaresForBlack();
-        }
-        else if (Color == Color.white)
-        {
-            _checkAvailableSquaresForWhite();
-        }
-    }
+            base.Init(startSquare, color, player);
 
-    private void _checkAvailableSquaresForWhite()
-    {
-        //TODO: Factor out common code
+            _pieceType = PieceType.Pawn;
+            MaterialValue = 1;
 
-        //first checks one square ahead
-        var squareToCheck = _board.GetAdjacentSquare(_currentSquare, Direction.North);
-
-        if (squareToCheck != null && squareToCheck.CurrentPiece == null)
-        {
-            AvailableSquares.Add(squareToCheck);
-
-            //if the one ahead was available it also checks 2 squares ahead if its the first move its making
-            if (_numberOfMovesMade == 0)
+            if (player.PlayerNum == 1)
             {
-                squareToCheck = _board.GetAdjacentSquare(squareToCheck, Direction.North);
-
-                if (squareToCheck != null && squareToCheck.CurrentPiece == null)
-                {
-                    AvailableSquares.Add(squareToCheck);
-                }
+                _finalRank = 8;
+            }
+            else
+            {
+                _finalRank = 1;
             }
         }
 
-        _checkDiagonal(Direction.NorthEast);
-        _checkDiagonal(Direction.NorthWest);
-
-        //TODO: Check for en passant
-    }
-
-    private void _checkAvailableSquaresForBlack()
-    {
-        //first checks one square ahead
-        var squareToCheck = _board.GetAdjacentSquare(_currentSquare, Direction.South);
-
-        if (squareToCheck != null && squareToCheck.CurrentPiece == null)
+        public override void MoveTo(Square square)
         {
-            AvailableSquares.Add(squareToCheck);
+            base.MoveTo(square);
 
-            //if the one ahead was available it also checks 2 squares ahead if its the first move its making
-            if (_numberOfMovesMade == 0)
+            if (square.Rank == _finalRank)
             {
-                squareToCheck = _board.GetAdjacentSquare(squareToCheck, Direction.South);
-
-                if (squareToCheck != null && squareToCheck.CurrentPiece == null)
-                {
-                    AvailableSquares.Add(squareToCheck);
-                }
+                _promotePiece();
             }
         }
 
-        _checkDiagonal(Direction.SouthEast);
-        _checkDiagonal(Direction.SouthWest);
-    }
-
-    private void _checkDiagonal(Direction direction)
-    {
-        var squareToCheck = _board.GetAdjacentSquare(_currentSquare, direction);
-
-        if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.Color != Color)
+        protected override void _checkAvailableSquares()
         {
-            AvailableSquares.Add(squareToCheck);
+            base._checkAvailableSquares();
+
+            if (_owningPlayer.PlayerNum == 1)
+            {
+                _checkAvailableSquaresForPlayer1();
+            }
+            else if (_owningPlayer.PlayerNum == 2)
+            {
+                _checkAvailableSquaresForPlayer2();
+            }
+        }
+
+        private void _promotePiece()
+        {
+            //default to queen for now
+            var piece = _board.SpawnPiece(PieceType.Queen, CurrentSquare, Color, _owningPlayer);
+            
+            _owningPlayer.PromotePiece(this, piece);
+            
+            Destroy(gameObject);
+        }
+
+        private void _checkAvailableSquaresForPlayer1()
+        {
+            //first checks one square ahead
+            var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, Direction.North);
+
+            if (squareToCheck != null && squareToCheck.CurrentPiece == null)
+            {
+                AvailableSquares.Add(squareToCheck);
+
+                //if the one ahead was available it also checks 2 squares ahead if its the first move its making
+                if (_numberOfMovesMade == 0)
+                {
+                    squareToCheck = _board.GetAdjacentSquare(squareToCheck, Direction.North);
+
+                    if (squareToCheck != null && squareToCheck.CurrentPiece == null)
+                    {
+                        AvailableSquares.Add(squareToCheck);
+                    }
+                }
+            }
+
+            _checkDiagonal(Direction.NorthEast);
+            _checkDiagonal(Direction.NorthWest);
+
+            //TODO: Check for en passant
+        }
+
+        private void _checkAvailableSquaresForPlayer2()
+        {
+            //first checks one square ahead
+            var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, Direction.South);
+
+            if (squareToCheck != null && squareToCheck.CurrentPiece == null)
+            {
+                AvailableSquares.Add(squareToCheck);
+
+                //if the one ahead was available it also checks 2 squares ahead if its the first move its making
+                if (_numberOfMovesMade == 0)
+                {
+                    squareToCheck = _board.GetAdjacentSquare(squareToCheck, Direction.South);
+
+                    if (squareToCheck != null && squareToCheck.CurrentPiece == null)
+                    {
+                        AvailableSquares.Add(squareToCheck);
+                    }
+                }
+            }
+
+            _checkDiagonal(Direction.SouthEast);
+            _checkDiagonal(Direction.SouthWest);
+        }
+
+        private void _checkDiagonal(Direction direction)
+        {
+            var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, direction);
+
+            if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.Color != Color)
+            {
+                AvailableSquares.Add(squareToCheck);
+            }
         }
     }
 }

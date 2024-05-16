@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ChessPieces;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,10 +34,14 @@ public class ChessBoard : MonoBehaviour
     public Action<Square> OnSquareClicked;
     public Action<Square> OnMouseReleased;
 
-    private Player _player;
+    public List<ChessPiece> WhitePieces { get; private set; }
+    public List<ChessPiece> BlackPieces { get; private set; }
 
     private void Awake()
     {
+        WhitePieces = new List<ChessPiece>();
+        BlackPieces = new List<ChessPiece>();
+
         _createBoard();
 
         foreach (var square in Board)
@@ -44,8 +49,6 @@ public class ChessBoard : MonoBehaviour
             square.OnSquareClicked += _onSquareClicked;
             square.OnMouseReleased += _onMouseReleased;
         }
-
-        _player = new Player(this);
     }
 
     private void OnDestroy()
@@ -59,8 +62,6 @@ public class ChessBoard : MonoBehaviour
 
     private void Update()
     {
-        _player.Tick();
-
         if (Input.GetMouseButtonUp(0))
         {
             var mousePosInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -104,48 +105,152 @@ public class ChessBoard : MonoBehaviour
         }
 
 
-        //Creating the white pieces
-        for (int i = 1; i <= 8; i++)
-        {
-            _spawnPiece(_pawnPrefab, Board[1, i - 1], Color.white);
-        }
+        ////Creating the white pieces
+        //for (int i = 1; i <= 8; i++)
+        //{
+        //    _spawnPiece(_pawnPrefab, Board[1, i - 1], Color.white);
+        //}
 
-        _spawnPiece(_bishopPrefab, Board[0, 2], Color.white);
-        _spawnPiece(_bishopPrefab, Board[0, 5], Color.white);
+        //_spawnPiece(_bishopPrefab, Board[0, 2], Color.white);
+        //_spawnPiece(_bishopPrefab, Board[0, 5], Color.white);
 
-        _spawnPiece(_knightPrefab, Board[0, 1], Color.white);
-        _spawnPiece(_knightPrefab, Board[0, 6], Color.white);
+        //_spawnPiece(_knightPrefab, Board[0, 1], Color.white);
+        //_spawnPiece(_knightPrefab, Board[0, 6], Color.white);
 
-        _spawnPiece(_rookPrefab, Board[0, 0], Color.white);
-        _spawnPiece(_rookPrefab, Board[0, 7], Color.white);
+        //_spawnPiece(_rookPrefab, Board[0, 0], Color.white);
+        //_spawnPiece(_rookPrefab, Board[0, 7], Color.white);
 
-        _spawnPiece(_queenPrefab, Board[0, 3], Color.white);
-        _spawnPiece(_kingPrefab, Board[0, 4], Color.white);
+        //_spawnPiece(_queenPrefab, Board[0, 3], Color.white);
+        //_spawnPiece(_kingPrefab, Board[0, 4], Color.white);
 
-        //black pieces
-        for (int i = 1; i <= 8; i++)
-        {
-            _spawnPiece(_pawnPrefab, Board[6, i - 1], Color.black);
-        }
+        ////black pieces
+        //for (int i = 1; i <= 8; i++)
+        //{
+        //    _spawnPiece(_pawnPrefab, Board[6, i - 1], Color.black);
+        //}
 
-        _spawnPiece(_bishopPrefab, Board[7, 2], Color.black);
-        _spawnPiece(_bishopPrefab, Board[7, 5], Color.black);
+        //_spawnPiece(_bishopPrefab, Board[7, 2], Color.black);
+        //_spawnPiece(_bishopPrefab, Board[7, 5], Color.black);
 
-        _spawnPiece(_knightPrefab, Board[7, 1], Color.black);
-        _spawnPiece(_knightPrefab, Board[7, 6], Color.black);
+        //_spawnPiece(_knightPrefab, Board[7, 1], Color.black);
+        //_spawnPiece(_knightPrefab, Board[7, 6], Color.black);
 
-        _spawnPiece(_rookPrefab, Board[7, 0], Color.black);
-        _spawnPiece(_rookPrefab, Board[7, 7], Color.black);
+        //_spawnPiece(_rookPrefab, Board[7, 0], Color.black);
+        //_spawnPiece(_rookPrefab, Board[7, 7], Color.black);
 
-        _spawnPiece(_queenPrefab, Board[7, 3], Color.black);
-        _spawnPiece(_kingPrefab, Board[7, 4], Color.black);
-
+        //_spawnPiece(_queenPrefab, Board[7, 3], Color.black);
+        //_spawnPiece(_kingPrefab, Board[7, 4], Color.black);
     }
 
-    private void _spawnPiece(ChessPiece piece, Square square, Color color)
+    public ChessPiece SpawnPiece(PieceType pieceType, Square square, Color color, Player owningPlayer)
     {
+        ChessPiece piece = null;
+
+        switch (pieceType)
+        {
+            case PieceType.Pawn:
+
+                piece = _pawnPrefab;
+
+                break;
+
+            case PieceType.Knight:
+
+                piece = _knightPrefab;
+
+                break;
+
+            case PieceType.Bishop:
+
+                piece = _bishopPrefab;
+
+                break;
+
+            case PieceType.Rook:
+
+                piece = _rookPrefab;
+
+                break;
+
+            case PieceType.Queen:
+
+                piece = _queenPrefab;
+
+                break;
+
+            case PieceType.King:
+
+                piece = _kingPrefab;
+
+                break;
+        }
+
+
         var spawnedPiece = Instantiate(piece, square.transform.position, Quaternion.identity, transform);
-        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color);
+        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color, owningPlayer);
+
+        if (color == Color.white)
+        {
+            WhitePieces.Add(spawnedPiece);
+        }
+        else if (color == Color.black)
+        {
+            BlackPieces.Add(spawnedPiece);
+        }
+
+        return spawnedPiece;
+    }
+
+    public List<Square> GetAvailableStartingSquares(int playerNum)
+    {
+        var squares = new List<Square>();
+
+        if (playerNum == 1)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    if (Board[j, i].CurrentPiece == null)
+                    {
+                        squares.Add(Board[j, i]);
+                    }
+                }
+            }
+        }
+        else if (playerNum == 2)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 6; j < 8; j++)
+                {
+                    if (Board[j, i].CurrentPiece == null)
+                    {
+                        squares.Add(Board[j, i]);
+                    }
+                }
+            }
+        }
+
+        return squares;
+    }
+
+    public void ClearBoard()
+    {
+        for (int i = WhitePieces.Count - 1; i >= 0; i--)
+        {
+            WhitePieces[i].CurrentSquare.SetCurrentPiece(null);
+            Destroy(WhitePieces[i]);
+        }
+
+        for (int i = BlackPieces.Count - 1; i >= 0; i--)
+        {
+            BlackPieces[i].CurrentSquare.SetCurrentPiece(null);
+            Destroy(BlackPieces[i]);
+        }
+
+        WhitePieces.Clear();
+        BlackPieces.Clear();
     }
 
     private void _onSquareClicked(Square square)

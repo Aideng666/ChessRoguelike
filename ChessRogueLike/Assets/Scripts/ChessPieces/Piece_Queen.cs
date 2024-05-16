@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using ChessPieces;
 using UnityEngine;
 
 public class Piece_Queen : ChessPiece
 {
-    public override void Init(Square startSquare, Color color)
+    public override void Init(Square startSquare, Color color, Player player)
     {
-        base.Init(startSquare, color);
+        base.Init(startSquare, color, player);
 
         _pieceType = PieceType.Queen;
-        _materialValue = 9;
+        MaterialValue = 9;
     }
 
     private void _checkAvailableSquaresInDirection(Direction direction)
     {
-        var squaresToCheck = _board.GetSquaresInDirection(_currentSquare, direction);
+        var squaresToCheck = _board.GetSquaresInDirection(CurrentSquare, direction);
 
         if (squaresToCheck.Count > 0)
         {
