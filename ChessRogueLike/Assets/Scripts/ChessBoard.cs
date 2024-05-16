@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ChessPieces;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -141,7 +142,7 @@ public class ChessBoard : MonoBehaviour
         //_spawnPiece(_kingPrefab, Board[7, 4], Color.black);
     }
 
-    public ChessPiece SpawnPiece(PieceType pieceType, Square square, Color color)
+    public ChessPiece SpawnPiece(PieceType pieceType, Square square, Color color, Player owningPlayer)
     {
         ChessPiece piece = null;
 
@@ -186,7 +187,7 @@ public class ChessBoard : MonoBehaviour
 
 
         var spawnedPiece = Instantiate(piece, square.transform.position, Quaternion.identity, transform);
-        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color);
+        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color, owningPlayer);
 
         if (color == Color.white)
         {

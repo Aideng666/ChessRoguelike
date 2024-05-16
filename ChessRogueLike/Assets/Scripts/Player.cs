@@ -2,14 +2,17 @@ using Codice.CM.Client.Differences.Merge;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ChessPieces;
 using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
 public class Player
 {
-    public Square SelectedSquare { get; set; }
-    public ChessPiece SelectedPiece { get; set; }
+    public Square SelectedSquare { get; private set; }
+    public ChessPiece SelectedPiece { get; private set; }
+
+    public int PlayerNum { get; private set; }
 
     private bool _isPlayerTurn;
     private bool _isMouseDown;
@@ -19,10 +22,11 @@ public class Player
 
     public Action OnTurnComplete;
 
-    public Player(ChessBoard board)
+    public Player(ChessBoard board, int playerNum)
     {
         SelectedSquare = null;
         SelectedPiece = null;
+        PlayerNum = playerNum;
 
         board.OnSquareClicked += _onSquareClicked;
         board.OnMouseReleased += _onMouseReleased;
@@ -40,6 +44,12 @@ public class Player
     public void SetPieces(List<ChessPiece> pieces)
     {
         _pieces = pieces;
+    }
+
+    public void PromotePiece(ChessPiece oldPiece, ChessPiece newPiece)
+    {
+        _pieces.Remove(oldPiece);
+        _pieces.Add(newPiece);
     }
 
     public void ClearPieces()
@@ -91,9 +101,20 @@ public class Player
         }
     }
 
+    private void _movePieceToSquare(Square square)
+    {
+        _resetSquareStates();
+
+        SelectedPiece.MoveTo(square);
+        _resetSelectedSquare();
+
+        OnTurnComplete?.Invoke();
+        _isPlayerTurn = false;
+    }
+
     private void _onMouseReleased(Square square)
     {
-        if (_isPlayerTurn)
+        if (_isPlayerTurn && GameManager.GameState == GameState.Round)
         {
             if (square == null)
             {
@@ -104,13 +125,7 @@ public class Player
             {
                 if (SelectedPiece.AvailableSquares.Contains(square))
                 {
-                    _resetSquareStates();
-
-                    SelectedPiece.MoveTo(square);
-                    _resetSelectedSquare();
-
-                    OnTurnComplete?.Invoke();
-                    _isPlayerTurn = false;
+                    _movePieceToSquare(square);
                 }
                 else if (square == SelectedSquare)
                 {
@@ -135,7 +150,7 @@ public class Player
 
     private void _onSquareClicked(Square square)
     {
-        if (_isPlayerTurn)
+        if (_isPlayerTurn && GameManager.GameState == GameState.Round)
         {
             //First reset old square states
             if (SelectedSquare != null && SelectedSquare != square)
@@ -164,7 +179,11 @@ public class Player
                     _squareSelectedThisClick = true;
                 }
 
-                if(!_pieces.Contains(square.CurrentPiece))
+                if (SelectedPiece != null && !_pieces.Contains(square.CurrentPiece) && SelectedPiece.AvailableSquares.Contains(square))
+                {
+                    _movePieceToSquare(square);
+                }
+                else if(!_pieces.Contains(square.CurrentPiece))
                 {
                     _resetSelectedSquare();
                 }

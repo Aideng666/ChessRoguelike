@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using ChessPieces;
 using UnityEngine;
 
 public class Piece_Rook : ChessPiece
 {
-    public override void Init(Square startSquare, Color color)
+    public override void Init(Square startSquare, Color color, Player player)
     {
-        base.Init(startSquare, color);
+        base.Init(startSquare, color, player);
 
         _pieceType = PieceType.Rook;
         MaterialValue = 5;
