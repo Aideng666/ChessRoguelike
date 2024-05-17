@@ -142,11 +142,11 @@ public class ChessBoard : MonoBehaviour
         //_spawnPiece(_kingPrefab, Board[7, 4], Color.black);
     }
 
-    public ChessPiece SpawnPiece(PieceType pieceType, Square square, Color color, Player owningPlayer)
+    public ChessPiece SpawnPiece(PieceData pieceData, Square square, Color color, Player owningPlayer)
     {
         ChessPiece piece = null;
 
-        switch (pieceType)
+        switch (pieceData.PieceType)
         {
             case PieceType.Pawn:
 
@@ -187,7 +187,7 @@ public class ChessBoard : MonoBehaviour
 
 
         var spawnedPiece = Instantiate(piece, square.transform.position, Quaternion.identity, transform);
-        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color, owningPlayer);
+        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color, owningPlayer, pieceData);
 
         if (color == Color.white)
         {

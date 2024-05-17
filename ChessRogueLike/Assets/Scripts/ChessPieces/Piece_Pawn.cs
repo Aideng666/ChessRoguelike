@@ -6,12 +6,11 @@ namespace ChessPieces
     {
         private int _finalRank;
         
-        public override void Init(Square startSquare, Color color, Player player)
+        public override void Init(Square startSquare, Color color, Player player, PieceData pieceData)
         {
-            base.Init(startSquare, color, player);
+            base.Init(startSquare, color, player, pieceData);
 
             _pieceType = PieceType.Pawn;
-            MaterialValue = 1;
 
             if (player.PlayerNum == 1)
             {
@@ -37,11 +36,11 @@ namespace ChessPieces
         {
             base._checkAvailableSquares();
 
-            if (_owningPlayer.PlayerNum == 1)
+            if (OwningPlayer.PlayerNum == 1)
             {
                 _checkAvailableSquaresForPlayer1();
             }
-            else if (_owningPlayer.PlayerNum == 2)
+            else if (OwningPlayer.PlayerNum == 2)
             {
                 _checkAvailableSquaresForPlayer2();
             }
@@ -50,9 +49,10 @@ namespace ChessPieces
         private void _promotePiece()
         {
             //default to queen for now
-            var piece = _board.SpawnPiece(PieceType.Queen, CurrentSquare, Color, _owningPlayer);
+            PieceData pieceData = new PieceData(PieceType.Queen, 9);
+            var piece = _board.SpawnPiece(pieceData, CurrentSquare, Color, OwningPlayer);
             
-            _owningPlayer.PromotePiece(this, piece);
+            OwningPlayer.PromotePiece(this, piece);
             
             Destroy(gameObject);
         }
