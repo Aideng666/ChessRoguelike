@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
         _player1 = new Player(_board, 1);
         _player2 = new Player(_board, 2);
 
+        var opponentAI = new ChessAI(_player2, _player1, false);
+
         _player1.OnTurnComplete += _onTurnComplete;
         _player2.OnTurnComplete += _onTurnComplete;
         _board.OnSquareClicked += _placePlayerPiece;
@@ -312,6 +314,11 @@ public class GameManager : MonoBehaviour
             case GameState.Shop:
                 
                 print("Round Won");
+                
+                //TEMP
+                _player1Pieces.Add(new PieceData(PieceType.Pawn, 1));
+                _transitionToState(GameState.PreRound);
+                ///////
                 
                 break;
             

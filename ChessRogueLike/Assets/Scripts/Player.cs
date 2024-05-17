@@ -2,6 +2,7 @@ using Codice.CM.Client.Differences.Merge;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChessPieces;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class Player
     private bool _isPlayerTurn;
     private bool _isMouseDown;
     private bool _squareSelectedThisClick;
+    private ChessAI _playerAI;
 
     private List<ChessPiece> _takenOpponentPieces;
     public List<ChessPiece> ActivePieces { get; private set; }
@@ -42,6 +44,11 @@ public class Player
     public void SetPlayerTurn()
     {
         _isPlayerTurn = true;
+    }
+
+    public void SetAI(ChessAI playerAI)
+    {
+        _playerAI = playerAI;
     }
 
     public void SetPieces(List<ChessPiece> pieces)
@@ -80,6 +87,23 @@ public class Player
         {
             SelectedPiece.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + (Vector3.forward * 10);
         }
+
+        if (PlayerNum == 2 && _isPlayerTurn && GameManager.GameState == GameState.Round)
+        {
+            _isPlayerTurn = false;
+            _playAIMove();
+        }
+    }
+
+    private void _playAIMove()
+    {
+        //await Task.Delay(1000);
+
+        var move = _playerAI.FindBestMove(1);
+
+        move?.PieceToMove.MoveTo(move.TargetSquare);
+
+        OnTurnComplete?.Invoke();
     }
 
     private void _setSelectedSquare(Square square)
@@ -131,7 +155,7 @@ public class Player
 
     private void _onMouseReleased(Square square)
     {
-        if (_isPlayerTurn && GameManager.GameState == GameState.Round)
+        if (_isPlayerTurn && GameManager.GameState == GameState.Round && PlayerNum == 1)
         {
             if (square == null)
             {
@@ -167,7 +191,7 @@ public class Player
 
     private void _onSquareClicked(Square square)
     {
-        if (_isPlayerTurn && GameManager.GameState == GameState.Round)
+        if (_isPlayerTurn && GameManager.GameState == GameState.Round && PlayerNum == 1)
         {
             //First reset old square states
             if (SelectedSquare != null && SelectedSquare != square)
