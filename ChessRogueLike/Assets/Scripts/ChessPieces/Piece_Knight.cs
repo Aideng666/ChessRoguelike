@@ -1,43 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
-using ChessPieces;
 using UnityEngine;
 
-public class Piece_Knight : ChessPiece
+namespace ChessPieces
 {
-    public override void Init(Square startSquare, Color color, Player player)
+    public class Piece_Knight : ChessPiece
     {
-        base.Init(startSquare, color, player);
-
-        _pieceType = PieceType.Knight;
-        MaterialValue = 3;
-    }
-
-    private void _checkAvailableKnightSquare(KnightDirection direction)
-    {
-        var squareToCheck = _board.CheckSquareKnightSpaceAway(CurrentSquare, direction);
-
-        if (squareToCheck != null && squareToCheck.CurrentPiece == null)
+        public override void Init(Square startSquare, Color color, Player player, PieceData pieceData)
         {
-            AvailableSquares.Add(squareToCheck);
+            base.Init(startSquare, color, player, pieceData);
+
+            _pieceType = PieceType.Knight;
         }
-        else if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.Color != Color)
+
+        private void _checkAvailableKnightSquare(KnightDirection direction)
         {
-            AvailableSquares.Add(squareToCheck);
+            var squareToCheck = _board.CheckSquareKnightSpaceAway(CurrentSquare, direction);
+
+            if (squareToCheck != null && squareToCheck.CurrentPiece == null)
+            {
+                AvailableSquares.Add(squareToCheck);
+            }
+            else if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.Color != Color)
+            {
+                AvailableSquares.Add(squareToCheck);
+            }
         }
-    }
 
-    protected override void _checkAvailableSquares()
-    {
-        base._checkAvailableSquares();
+        protected override void _checkAvailableSquares()
+        {
+            base._checkAvailableSquares();
 
-        _checkAvailableKnightSquare(KnightDirection.OneOClock);
-        _checkAvailableKnightSquare(KnightDirection.TwoOClock);
-        _checkAvailableKnightSquare(KnightDirection.FourOClock);
-        _checkAvailableKnightSquare(KnightDirection.FiveOClock);
-        _checkAvailableKnightSquare(KnightDirection.SevenOClock);
-        _checkAvailableKnightSquare(KnightDirection.EightOClock);
-        _checkAvailableKnightSquare(KnightDirection.TenOClock);
-        _checkAvailableKnightSquare(KnightDirection.ElevenOCLock);
+            _checkAvailableKnightSquare(KnightDirection.OneOClock);
+            _checkAvailableKnightSquare(KnightDirection.TwoOClock);
+            _checkAvailableKnightSquare(KnightDirection.FourOClock);
+            _checkAvailableKnightSquare(KnightDirection.FiveOClock);
+            _checkAvailableKnightSquare(KnightDirection.SevenOClock);
+            _checkAvailableKnightSquare(KnightDirection.EightOClock);
+            _checkAvailableKnightSquare(KnightDirection.TenOClock);
+            _checkAvailableKnightSquare(KnightDirection.ElevenOCLock);
+        }
     }
 }

@@ -10,17 +10,18 @@ namespace ChessPieces
 
         protected PieceType _pieceType;
         protected ChessBoard _board;
-        protected Player _owningPlayer;
+        //protected Player _owningPlayer;
         private SpriteRenderer _spriteRenderer;
 
         protected int _numberOfMovesMade = 0;
 
         public List<Square> AvailableSquares { get; private set; }
         public Color Color { get; private set; }
-        public int MaterialValue { get; protected set; }
         public Square CurrentSquare { get; private set; }
+        public PieceData PieceData { get; private set; }
+        public Player OwningPlayer { get; private set; }
 
-        public virtual void Init(Square startSquare, Color color, Player owningPlayer)
+        public virtual void Init(Square startSquare, Color color, Player owningPlayer, PieceData pieceData)
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _board = FindObjectOfType<ChessBoard>();
@@ -30,7 +31,8 @@ namespace ChessPieces
             CurrentSquare.SetCurrentPiece(this);
             transform.position = startSquare.transform.position;
             _numberOfMovesMade = 0;
-            _owningPlayer = owningPlayer;
+            OwningPlayer = owningPlayer;
+            PieceData = pieceData;
             _checkAvailableSquares();
 
             if (Color == Color.black)
@@ -51,10 +53,12 @@ namespace ChessPieces
 
         public virtual void MoveTo(Square square)
         {
-            if (square.CurrentPiece != null)
+            var takenPiece = square.CurrentPiece;
+            
+            if (takenPiece != null)
             {
-                //replace with some sort of TakePiece function that keeps track of all pieces that were taken
-                Destroy(square.CurrentPiece);
+                OwningPlayer.AddTakenPiece(takenPiece);
+                takenPiece.OwningPlayer.RemovePiece(takenPiece);
             }
 
             CurrentSquare.SetCurrentPiece(null);

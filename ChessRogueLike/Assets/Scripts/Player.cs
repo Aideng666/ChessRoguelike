@@ -6,6 +6,7 @@ using ChessPieces;
 using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using Object = UnityEngine.Object;
 
 public class Player
 {
@@ -18,7 +19,8 @@ public class Player
     private bool _isMouseDown;
     private bool _squareSelectedThisClick;
 
-    private List<ChessPiece> _pieces;
+    private List<ChessPiece> _takenOpponentPieces;
+    public List<ChessPiece> ActivePieces { get; private set; }
 
     public Action OnTurnComplete;
 
@@ -33,7 +35,8 @@ public class Player
 
         _isPlayerTurn = false;
 
-        _pieces = new List<ChessPiece>();
+        ActivePieces = new List<ChessPiece>();
+        _takenOpponentPieces = new List<ChessPiece>();
     }
 
     public void SetPlayerTurn()
@@ -43,18 +46,32 @@ public class Player
 
     public void SetPieces(List<ChessPiece> pieces)
     {
-        _pieces = pieces;
+        ActivePieces = pieces;
+    }
+
+    public void RemovePiece(ChessPiece piece)
+    {
+        if (ActivePieces.Contains(piece))
+        {
+            ActivePieces.Remove(piece);
+            GameObject.Destroy(piece.gameObject);
+        }
+    }
+
+    public void AddTakenPiece(ChessPiece piece)
+    {
+        _takenOpponentPieces.Add(piece);
     }
 
     public void PromotePiece(ChessPiece oldPiece, ChessPiece newPiece)
     {
-        _pieces.Remove(oldPiece);
-        _pieces.Add(newPiece);
+        ActivePieces.Remove(oldPiece);
+        ActivePieces.Add(newPiece);
     }
 
     public void ClearPieces()
     {
-        _pieces.Clear();
+        ActivePieces.Clear();
     }
 
     public void Tick()
@@ -67,7 +84,7 @@ public class Player
 
     private void _setSelectedSquare(Square square)
     {
-        if (_pieces.Contains(square.CurrentPiece))
+        if (ActivePieces.Contains(square.CurrentPiece))
         {
             SelectedSquare = square;
             SelectedPiece = square.CurrentPiece;
@@ -179,11 +196,11 @@ public class Player
                     _squareSelectedThisClick = true;
                 }
 
-                if (SelectedPiece != null && !_pieces.Contains(square.CurrentPiece) && SelectedPiece.AvailableSquares.Contains(square))
+                if (SelectedPiece != null && !ActivePieces.Contains(square.CurrentPiece) && SelectedPiece.AvailableSquares.Contains(square))
                 {
                     _movePieceToSquare(square);
                 }
-                else if(!_pieces.Contains(square.CurrentPiece))
+                else if(!ActivePieces.Contains(square.CurrentPiece))
                 {
                     _resetSelectedSquare();
                 }
