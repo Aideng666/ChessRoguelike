@@ -488,6 +488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boardPrefab: {fileID: 7036912976248445620, guid: ea2ca7d233891684fa6924f2b2cf65de, type: 3}
+  _aiPrefab: {fileID: 5028047713942384752, guid: 06dddf1e911a17943ad1794a84133762, type: 3}
 --- !u!1 &919925739
 GameObject:
   m_ObjectHideFlags: 0

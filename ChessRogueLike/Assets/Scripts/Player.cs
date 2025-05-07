@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using Object = UnityEngine.Object;
 
-public class Player
+public class Player : IPlayer
 {
     public Square SelectedSquare { get; private set; }
     public ChessPiece SelectedPiece { get; private set; }
@@ -19,8 +19,13 @@ public class Player
     private bool _isPlayerTurn;
     private bool _isMouseDown;
     private bool _squareSelectedThisClick;
-    private ChessAI _playerAI;
 
+    private MinimaxAI _ai;
+    private ChessBoard _board;
+    private bool _isAi;
+    private bool _isWhite;
+    private int _aiDepth;
+    
     private List<ChessPiece> _takenOpponentPieces;
     public List<ChessPiece> ActivePieces { get; private set; }
 
@@ -31,6 +36,7 @@ public class Player
         SelectedSquare = null;
         SelectedPiece = null;
         PlayerNum = playerNum;
+        _board = board;
 
         board.OnSquareClicked += _onSquareClicked;
         board.OnMouseReleased += _onMouseReleased;
@@ -44,11 +50,6 @@ public class Player
     public void SetPlayerTurn()
     {
         _isPlayerTurn = true;
-    }
-
-    public void SetAI(ChessAI playerAI)
-    {
-        _playerAI = playerAI;
     }
 
     public void SetPieces(List<ChessPiece> pieces)
@@ -83,27 +84,26 @@ public class Player
 
     public void Tick()
     {
-        if (_isMouseDown && SelectedPiece != null)
+        if (_isAi && _isPlayerTurn)
+        {
+            var moveToMake = _ai.GetBestMove(_aiDepth, _isWhite, _board);
+            _board.Board[moveToMake.StartingSquare.x, moveToMake.StartingSquare.y].CurrentPiece.MoveTo(_board.Board[moveToMake.EndingSquare.x, moveToMake.EndingSquare.y]);
+            
+            OnTurnComplete?.Invoke();
+            _isPlayerTurn = false;
+        }
+        else if (_isMouseDown && SelectedPiece != null)
         {
             SelectedPiece.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + (Vector3.forward * 10);
         }
-
-        if (PlayerNum == 2 && _isPlayerTurn && GameManager.GameState == GameState.Round)
-        {
-            _isPlayerTurn = false;
-            _playAIMove();
-        }
     }
 
-    private void _playAIMove()
+    public void SetAIPlayer(MinimaxAI ai, int aiDepth, bool isWhite)
     {
-        //await Task.Delay(1000);
-
-        var move = _playerAI.FindBestMove(1);
-
-        move?.PieceToMove.MoveTo(move.TargetSquare);
-
-        OnTurnComplete?.Invoke();
+        _isAi = true;
+        _ai = ai;
+        _aiDepth = aiDepth;
+        _isWhite = isWhite;
     }
 
     private void _setSelectedSquare(Square square)

@@ -4,9 +4,9 @@ namespace ChessPieces
 {
     public class Piece_Rook : ChessPiece
     {
-        public override void Init(Square startSquare, Color color, Player player, PieceData pieceData)
+        public override void Init(Square startSquare, IPlayer player, PieceData pieceData)
         {
-            base.Init(startSquare, color, player, pieceData);
+            base.Init(startSquare, player, pieceData);
 
             _pieceType = PieceType.Rook;
         }
@@ -19,11 +19,11 @@ namespace ChessPieces
             {
                 foreach (var square in squaresToCheck)
                 {
-                    if (square.CurrentPiece != null && square.CurrentPiece.Color == Color)
+                    if (square.CurrentPiece != null && square.CurrentPiece.PieceData.Color == PieceData.Color)
                     {
                         break;
                     }
-                    else if (square.CurrentPiece != null && square.CurrentPiece.Color != Color)
+                    else if (square.CurrentPiece != null && square.CurrentPiece.PieceData.Color != PieceData.Color)
                     {
                         AvailableSquares.Add(square);
                         break;

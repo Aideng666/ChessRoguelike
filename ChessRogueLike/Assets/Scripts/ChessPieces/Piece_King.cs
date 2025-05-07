@@ -4,9 +4,9 @@ namespace ChessPieces
 {
     public class Piece_King : ChessPiece
     {
-        public override void Init(Square startSquare, Color color, Player player, PieceData pieceData)
+        public override void Init(Square startSquare, IPlayer player, PieceData pieceData)
         {
-            base.Init(startSquare, color, player, pieceData);
+            base.Init(startSquare, player, pieceData);
 
             _pieceType = PieceType.King;
         }
@@ -19,7 +19,7 @@ namespace ChessPieces
             {
                 AvailableSquares.Add(squareToCheck);
             }
-            else if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.Color != Color)
+            else if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.PieceData.Color != PieceData.Color)
             {
                 AvailableSquares.Add(squareToCheck);
             }

@@ -1,29 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ChessPieces;
 using Codice.CM.Client.Differences.Merge;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class ChessAI
+public class ChessAI : IPlayer
 {
-    private Player _player;
+    public List<ChessPiece> ActivePieces { get; private set; }
+    
+    public Action OnTurnComplete;
+    
     private Player _opponent;
     private bool _isBossAI;
-    
-    public ChessAI(Player player, Player opponent, bool isBoss)
+    private bool _hasTurn;
+
+    private List<ChessPiece> _takenOpponentPieces;
+    public ChessAI(Player opponent, bool isBoss)
     {
-        _player = player;
         _opponent = opponent;
         _isBossAI = isBoss;
+        _hasTurn = false;
         
-        player.SetAI(this);
+        ActivePieces = new List<ChessPiece>();
+        _takenOpponentPieces = new List<ChessPiece>();
     }
 
     //for now this will only check its own available moves and pick the one that gives it the highest gain of material
     public ChessMove FindBestMove(int depth)
     {
-        var legalMoves = _getAllLegalMoves(_player);
+        var legalMoves = _getAllLegalMoves();
 
         var bestMoves = new List<ChessMove>();
 
@@ -50,12 +59,61 @@ public class ChessAI
 
         return null;
     }
+    
+    public void SetPieces(List<ChessPiece> pieces)
+    {
+        ActivePieces = pieces;
+    }
+    
+    public void RemovePiece(ChessPiece piece)
+    {
+        if (ActivePieces.Contains(piece))
+        {
+            ActivePieces.Remove(piece);
+            GameObject.Destroy(piece.gameObject);
+        }
+    }
+    
+    public void PromotePiece(ChessPiece oldPiece, ChessPiece newPiece)
+    {
+        ActivePieces.Remove(oldPiece);
+        ActivePieces.Add(newPiece);
+    }
 
-    private List<ChessMove> _getAllLegalMoves(Player player)
+    public void ClearPieces()
+    {
+        ActivePieces.Clear();
+    }
+
+    public void AddTakenPiece(ChessPiece piece)
+    {
+        _takenOpponentPieces.Add(piece);
+    }
+
+
+    public async Task SetAiTurn()
+    {
+        _hasTurn = true;
+
+        await PlayBestMove();
+    }
+    
+    private async Task PlayBestMove()
+    {
+        await Task.Delay(1000);
+
+        var move = FindBestMove(1);
+
+        move?.PieceToMove.MoveTo(move.TargetSquare);
+
+        OnTurnComplete?.Invoke();
+    }
+
+    private List<ChessMove> _getAllLegalMoves()
     {
         var legalMoves = new List<ChessMove>();
 
-        foreach (var piece in player.ActivePieces)
+        foreach (var piece in ActivePieces)
         {
             foreach (var square in piece.AvailableSquares)
             {

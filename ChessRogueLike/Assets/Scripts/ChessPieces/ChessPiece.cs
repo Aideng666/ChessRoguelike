@@ -16,16 +16,14 @@ namespace ChessPieces
         protected int _numberOfMovesMade = 0;
 
         public List<Square> AvailableSquares { get; private set; }
-        public Color Color { get; private set; }
         public Square CurrentSquare { get; private set; }
         public PieceData PieceData { get; private set; }
-        public Player OwningPlayer { get; private set; }
+        public IPlayer OwningPlayer { get; private set; }
 
-        public virtual void Init(Square startSquare, Color color, Player owningPlayer, PieceData pieceData)
+        public virtual void Init(Square startSquare, IPlayer owningPlayer, PieceData pieceData)
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _board = FindObjectOfType<ChessBoard>();
-            Color = color;
             AvailableSquares = new List<Square>();
             CurrentSquare = startSquare;
             CurrentSquare.SetCurrentPiece(this);
@@ -35,7 +33,7 @@ namespace ChessPieces
             PieceData = pieceData;
             _checkAvailableSquares();
 
-            if (Color == Color.black)
+            if (PieceData.Color == Color.black)
             {
                 _spriteRenderer.sprite = _blackSprite;
             }
@@ -72,6 +70,16 @@ namespace ChessPieces
         public void UpdateAvailableSquares()
         {
             _checkAvailableSquares();
+        }
+
+        public bool IsWhite()
+        {
+            if (PieceData.Color != Color.black && PieceData.Color != Color.white)
+            {
+                Debug.LogError("Piece is neither white or black");
+            }
+            
+            return PieceData.Color == Color.white;
         }
 
         protected virtual void _checkAvailableSquares()
