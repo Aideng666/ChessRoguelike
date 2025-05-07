@@ -103,46 +103,9 @@ public class ChessBoard : MonoBehaviour
                 nextSquareColor = Color.black;
             }
         }
-
-
-        ////Creating the white pieces
-        //for (int i = 1; i <= 8; i++)
-        //{
-        //    _spawnPiece(_pawnPrefab, Board[1, i - 1], Color.white);
-        //}
-
-        //_spawnPiece(_bishopPrefab, Board[0, 2], Color.white);
-        //_spawnPiece(_bishopPrefab, Board[0, 5], Color.white);
-
-        //_spawnPiece(_knightPrefab, Board[0, 1], Color.white);
-        //_spawnPiece(_knightPrefab, Board[0, 6], Color.white);
-
-        //_spawnPiece(_rookPrefab, Board[0, 0], Color.white);
-        //_spawnPiece(_rookPrefab, Board[0, 7], Color.white);
-
-        //_spawnPiece(_queenPrefab, Board[0, 3], Color.white);
-        //_spawnPiece(_kingPrefab, Board[0, 4], Color.white);
-
-        ////black pieces
-        //for (int i = 1; i <= 8; i++)
-        //{
-        //    _spawnPiece(_pawnPrefab, Board[6, i - 1], Color.black);
-        //}
-
-        //_spawnPiece(_bishopPrefab, Board[7, 2], Color.black);
-        //_spawnPiece(_bishopPrefab, Board[7, 5], Color.black);
-
-        //_spawnPiece(_knightPrefab, Board[7, 1], Color.black);
-        //_spawnPiece(_knightPrefab, Board[7, 6], Color.black);
-
-        //_spawnPiece(_rookPrefab, Board[7, 0], Color.black);
-        //_spawnPiece(_rookPrefab, Board[7, 7], Color.black);
-
-        //_spawnPiece(_queenPrefab, Board[7, 3], Color.black);
-        //_spawnPiece(_kingPrefab, Board[7, 4], Color.black);
     }
 
-    public ChessPiece SpawnPiece(PieceData pieceData, Square square, Color color, Player owningPlayer)
+    public ChessPiece SpawnPiece(PieceData pieceData, Square square, IPlayer owningPlayer)
     {
         ChessPiece piece = null;
 
@@ -187,13 +150,13 @@ public class ChessBoard : MonoBehaviour
 
 
         var spawnedPiece = Instantiate(piece, square.transform.position, Quaternion.identity, transform);
-        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], color, owningPlayer, pieceData);
+        spawnedPiece.Init(Board[square.Rank - 1, FileToNumber(square.File) - 1], owningPlayer, pieceData);
 
-        if (color == Color.white)
+        if (pieceData.Color == Color.white)
         {
             WhitePieces.Add(spawnedPiece);
         }
-        else if (color == Color.black)
+        else if (pieceData.Color == Color.black)
         {
             BlackPieces.Add(spawnedPiece);
         }
@@ -237,6 +200,7 @@ public class ChessBoard : MonoBehaviour
 
     public void ClearBoard()
     {
+        //TODO: loop through each square on the board and check if it has a piece to remove instead of using the two arrays?
         for (int i = WhitePieces.Count - 1; i >= 0; i--)
         {
             WhitePieces[i].CurrentSquare.SetCurrentPiece(null);

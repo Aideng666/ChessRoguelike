@@ -6,13 +6,13 @@ namespace ChessPieces
     {
         private int _finalRank;
         
-        public override void Init(Square startSquare, Color color, Player player, PieceData pieceData)
+        public override void Init(Square startSquare, IPlayer player, PieceData pieceData)
         {
-            base.Init(startSquare, color, player, pieceData);
+            base.Init(startSquare, player, pieceData);
 
             _pieceType = PieceType.Pawn;
 
-            if (player.PlayerNum == 1)
+            if (player.GetType() == typeof(Player))
             {
                 _finalRank = 8;
             }
@@ -36,11 +36,11 @@ namespace ChessPieces
         {
             base._checkAvailableSquares();
 
-            if (OwningPlayer.PlayerNum == 1)
+            if (OwningPlayer.GetType() == typeof(Player))
             {
                 _checkAvailableSquaresForPlayer1();
             }
-            else if (OwningPlayer.PlayerNum == 2)
+            else if (OwningPlayer.GetType() == typeof(ChessAI))
             {
                 _checkAvailableSquaresForPlayer2();
             }
@@ -48,12 +48,13 @@ namespace ChessPieces
 
         private void _promotePiece()
         {
-            //default to queen for now
-            PieceData pieceData = new PieceData(PieceType.Queen, 9);
-            var piece = _board.SpawnPiece(pieceData, CurrentSquare, Color, OwningPlayer);
-            
+            //TODO: This defaults to queen for now, update so it can be chosen
+            PieceData pieceData = new PieceData(PieceType.Queen, PieceData.Color);
+            var piece = _board.SpawnPiece(pieceData, CurrentSquare, OwningPlayer);
+
             OwningPlayer.PromotePiece(this, piece);
             
+            //Destroys because we promoted and created a new piece game object
             Destroy(gameObject);
         }
 
@@ -113,7 +114,7 @@ namespace ChessPieces
         {
             var squareToCheck = _board.GetAdjacentSquare(CurrentSquare, direction);
 
-            if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.Color != Color)
+            if (squareToCheck != null && squareToCheck.CurrentPiece != null && squareToCheck.CurrentPiece.PieceData.Color != PieceData.Color)
             {
                 AvailableSquares.Add(squareToCheck);
             }
